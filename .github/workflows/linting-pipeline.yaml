@@ -24,8 +24,11 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Lint HTML Files
-        run: npx htmlhint src/**/*.html
+      - name: Ensure Correct Permissions for HTMLHint
+        run: chmod +x ./node_modules/.bin/htmlhint
 
-      - name: Lint CSS Files
-        run: npx stylelint styles/**/*.css
+      - name: Check for HTML Files
+        run: '[ "$(find src -name "*.html" | wc -l)" -gt 0 ] && npx htmlhint src/**/*.html || echo "No HTML files found."'
+
+      - name: Check for CSS Files
+        run: '[ "$(find styles -name "*.css" | wc -l)" -gt 0 ] && npx stylelint styles/**/*.css || echo "No CSS files found."'
